@@ -24,7 +24,7 @@ export class BoardComponent{
     let foundMove = this.FindMoveFor(x, y);
     return foundMove;
   }
-  FindMoveFor(x:number, y:number, replace: boolean = false){
+  FindMoveFor(x:number, y:number){
     let found = false;
     let possibleDirections: number[] = [];
     for (let index = 0; index < this.directions.length; index++) {
@@ -35,10 +35,27 @@ export class BoardComponent{
     }
     return found;
   }
-  FindDirection(x:number, y:number, direction: number[]): boolean{
-    if(x == 2 && y == 3){
-      let a;
+  AddBlock(x:number, y:number){
+    this.ReplaceDirections(x, y);
+    this.blocks[x][y] = this.colorTurn;
+    this.changeColor.emit();
+  }
+  ReplaceDirections(x:number, y:number){
+    for (let index = 0; index < this.directions.length; index++) {
+      if(this.FindDirection(x, y, this.directions[index])){
+        this.ReplaceDirection(x, y, this.directions[index]);
+      }
     }
+  }
+  ReplaceDirection(x:number, y:number, direction: number[]){
+    // let block = this.blocks[x][y];
+    let nextBlock = this.blocks[x + direction[0]][y + direction[1]];  
+    this.blocks[x][y] = this.colorTurn;
+    if(nextBlock != this.colorTurn){
+      this.ReplaceDirection(x + direction[0], y + direction[1], direction);
+    }
+  }
+  FindDirection(x:number, y:number, direction: number[]): boolean{
     if(x > 0 && y > 0 && x < 7 && y < 7){
       let block = this.blocks[x][y];
       let nextBlock = this.blocks[x + direction[0]][y + direction[1]];
@@ -53,8 +70,5 @@ export class BoardComponent{
       }
     }
     return false;
-  }
-  AddBlock(x:number, y:number){
-    this.blocks[x][y] = this.colorTurn;
   }
 }

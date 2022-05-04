@@ -8,8 +8,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class PuckComponent{
   @Input('value') value: string = ' ';
   @Input('foundMove') move: boolean = false;
-  @Output('addBlock') add = new EventEmitter<{}>();
+  @Output('addBlock') add = new EventEmitter();
   AddBlock(){
-    // this.add.emit();
+    this.add.emit();
   }
 }

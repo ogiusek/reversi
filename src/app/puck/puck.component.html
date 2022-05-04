@@ -1,4 +1,6 @@
 <div class="background" [ngClass]="move && value == '' ? 'add' : ''">
     <div class="block" *ngIf="value != ''" [ngStyle]="{'background-color': value == 'b' ? 'black':'white'}"></div>
-    <div class="block move" *ngIf="move && value == ''" (click)="AddBlock()"></div>
+    <div class="moveBlockBackground" *ngIf="move && value == ''" (click)="AddBlock()">
+        <div class="block move"></div>
+    </div>
 </div>
