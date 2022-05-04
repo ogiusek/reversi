@@ -1,0 +1,11 @@
+div {
+    transition: 1s;
+}
+
+.black {
+    background-color: black;
+}
+
+.white {
+    background-color: white;
+}

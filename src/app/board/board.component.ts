@@ -48,7 +48,6 @@ export class BoardComponent{
     }
   }
   ReplaceDirection(x:number, y:number, direction: number[]){
-    // let block = this.blocks[x][y];
     let nextBlock = this.blocks[x + direction[0]][y + direction[1]];  
     this.blocks[x][y] = this.colorTurn;
     if(nextBlock != this.colorTurn){
@@ -56,7 +55,7 @@ export class BoardComponent{
     }
   }
   FindDirection(x:number, y:number, direction: number[]): boolean{
-    if(x > 0 && y > 0 && x < 7 && y < 7){
+    if(x + direction[0] >= 0 && y + direction[1] >= 0 && x + direction[0] <= 7 && y + direction[1] <= 7){
       let block = this.blocks[x][y];
       let nextBlock = this.blocks[x + direction[0]][y + direction[1]];
       if(nextBlock != ''){

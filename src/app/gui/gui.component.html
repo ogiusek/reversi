@@ -1,1 +1,17 @@
-<p>gui works!</p>
+<div id="main" [ngStyle]="{'height': '20vh - 16px'}">
+    <div id="black">
+        <h1>Black</h1>
+        <h1>Black has {{ bPoints }} points</h1>
+    </div>
+    <div class="generalInfo" [ngClass]="turn == 'w' ? 'white':'black'">
+        <div id="buttons">
+            <button>Back ←</button>
+            <button>Reset</button>
+        </div>
+        <h1 [ngClass]="turn == 'w' ? 'white':'black'">{{ colorName }} turn</h1>
+    </div>
+    <div id="white">
+        <h1>White</h1>
+        <h1>White has {{ wPoints }} points</h1>
+    </div>
+</div>

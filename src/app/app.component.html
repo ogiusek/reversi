@@ -1,1 +1,4 @@
-<app-board [array]="blocksArray" [color]="colorTurn" (changeColor)="ChangeColor()"></app-board>
+<div [ngClass]="colorTurn == 'w' ? 'white':'black'">
+    <app-board [array]="blocksArray" [color]="colorTurn" (changeColor)="ChangeColor()"></app-board>
+    <app-gui [color]="colorTurn"></app-gui>
+</div>
