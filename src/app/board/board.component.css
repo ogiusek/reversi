@@ -1,0 +1,16 @@
+.board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.line {
+    display: flex;
+    flex-direction: column;
+}
+
+.app {
+    border: solid;
+    border-color: black;
+    border-width: 1px;
+}

@@ -1,0 +1,32 @@
+.background {
+    width: 10vh;
+    height: 10vh;
+    background-color: green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 1s;
+}
+
+.block {
+    width: 70%;
+    height: 70%;
+    border-radius: 50%;
+}
+
+.add:hover {
+    background-color: lightgreen!important;
+}
+
+.move {
+    background-color: forestgreen!important;
+    width: 40%;
+    height: 40%;
+}
+
+@media all and (max-width: 80vh) {
+    .background {
+        width: 12.5vw;
+        height: 12.5vw;
+    }
+}
