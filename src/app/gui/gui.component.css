@@ -9,7 +9,22 @@
 
 .generalInfo h1 {
     transition: 1s;
+    font-size: 2vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+    margin: 0px;
+}
+
+.generalInfo h2 {
+    font-size: 1.5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
+    height: 50%;
+    margin: 0px;
 }
 
 .generalInfo {

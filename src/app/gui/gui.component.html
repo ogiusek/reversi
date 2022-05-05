@@ -8,7 +8,12 @@
             <button>Back ←</button>
             <button (click)="Reset()">Reset</button>
         </div>
-        <h1 [ngClass]="turn == 'w' ? 'white':'black'">{{ colorName }} turn</h1>
+        <div [ngClass]="turn == 'w' ? 'white':'black'" *ngIf="!endTurn">
+            <h1 *ngIf="turn == 'b'">black</h1>
+            <h1 *ngIf="turn == 'w'">white</h1>
+            <h1 style="transition: 0s;"> turn</h1>
+        </div>
+        <h2 *ngIf="endTurn">Game Ended<br>{{ finishText }}</h2>
     </div>
     <div id="white">
         <h1>White</h1>

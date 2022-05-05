@@ -8,9 +8,10 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class GuiComponent{
   @Input('points') blocks = {white:2, black:2};
   @Input('color') turn = 'b';
+  @Input('finished') endTurn = false;
   @Output('reset') reset = new EventEmitter();
   @Output('back') back = new EventEmitter();
-  colorName = this.turn == 'b' ? 'black':'white';
+  finishText = this.blocks.black > this.blocks.white ? 'black won': this.blocks.white > this.blocks.black ? 'white won':'draw';
   Reset(){
     this.reset.emit();
   }

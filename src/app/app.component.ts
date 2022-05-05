@@ -6,24 +6,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
+  movesHistory: string[][][] = [];
   blocksArray: string[][] = [];
   arrayLength = 8;
   colorTurn = 'b';
+  finishedGame = false;
   blocks = {
     white: 2,
     black: 2
   };
   ngOnInit(): void{
-    for (let i = 0; i < this.arrayLength; i++) {
-      this.blocksArray.push([]);
-      for (let j = 0; j < this.arrayLength; j++) {
-        this.blocksArray[i].push("");
-      }
-    }
-    this.blocksArray[this.arrayLength / 2][this.arrayLength / 2] = "w";
-    this.blocksArray[this.arrayLength / 2 - 1][this.arrayLength / 2 - 1] = "w";
-    this.blocksArray[this.arrayLength / 2 - 1][this.arrayLength / 2] = "b";
-    this.blocksArray[this.arrayLength / 2][this.arrayLength / 2 - 1] = "b";
+    this.Reset();
+  }
+  EndGame(){
+    this.finishedGame = true;
   }
   WriteToBlocks(blocks: {whiteBlocks: number, blackBlocks: number}){
     this.blocks.white = blocks.whiteBlocks;
@@ -32,6 +28,7 @@ export class AppComponent implements OnInit{
   Reset(){
     this.blocksArray = [];
     this.colorTurn = 'b';
+    this.finishedGame = false;
     for (let i = 0; i < this.arrayLength; i++) {
       this.blocksArray.push([]);
       for (let j = 0; j < this.arrayLength; j++) {
