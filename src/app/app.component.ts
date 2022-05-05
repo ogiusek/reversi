@@ -28,7 +28,6 @@ export class AppComponent implements OnInit{
   WriteToBlocks(blocks: {whiteBlocks: number, blackBlocks: number}){
     this.blocks.white = blocks.whiteBlocks;
     this.blocks.black = blocks.blackBlocks;
-    console.log(this.blocks);
   }
   Reset(){
     this.blocksArray = [];
