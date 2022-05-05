@@ -20,7 +20,20 @@ export class AppComponent implements OnInit{
     this.blocksArray[this.arrayLength / 2 - 1][this.arrayLength / 2 - 1] = "w";
     this.blocksArray[this.arrayLength / 2 - 1][this.arrayLength / 2] = "b";
     this.blocksArray[this.arrayLength / 2][this.arrayLength / 2 - 1] = "b";
-    console.log(this.blocksArray);
+  }
+  Reset(){
+    this.blocksArray = [];
+    this.colorTurn = 'b';
+    for (let i = 0; i < this.arrayLength; i++) {
+      this.blocksArray.push([]);
+      for (let j = 0; j < this.arrayLength; j++) {
+        this.blocksArray[i].push("");
+      }
+    }
+    this.blocksArray[this.arrayLength / 2][this.arrayLength / 2] = "w";
+    this.blocksArray[this.arrayLength / 2 - 1][this.arrayLength / 2 - 1] = "w";
+    this.blocksArray[this.arrayLength / 2 - 1][this.arrayLength / 2] = "b";
+    this.blocksArray[this.arrayLength / 2][this.arrayLength / 2 - 1] = "b";
   }
   ChangeColor(){
     if(this.colorTurn == 'b'){

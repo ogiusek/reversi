@@ -9,6 +9,7 @@ export class PuckComponent{
   @Input('value') value: string = ' ';
   @Input('foundMove') move: boolean = false;
   @Output('addBlock') add = new EventEmitter();
+  @Output('loaded') loaded = new EventEmitter();
   AddBlock(){
     this.add.emit();
   }

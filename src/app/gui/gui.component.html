@@ -6,7 +6,7 @@
     <div class="generalInfo" [ngClass]="turn == 'w' ? 'white':'black'">
         <div id="buttons">
             <button>Back ←</button>
-            <button>Reset</button>
+            <button (click)="Reset()">Reset</button>
         </div>
         <h1 [ngClass]="turn == 'w' ? 'white':'black'">{{ colorName }} turn</h1>
     </div>

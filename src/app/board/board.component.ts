@@ -9,6 +9,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class BoardComponent{
   @Input('array') blocks: string[][] = [];
   @Input('color') colorTurn:string = '';
+  @Output('endGame') end = new EventEmitter();
   @Output('changeColor') changeColor = new EventEmitter();
   directions = [
     [-1, 0],
@@ -20,11 +21,25 @@ export class BoardComponent{
     [ 0,-1],
     [-1,-1]
   ];
+  CountMoves(){
+    let moveAmount = 0;
+    for (let i = 0; i < this.blocks.length; i++) {
+      for (let j = 0; j < this.blocks[i].length; j++) {
+        if(this.FindMoveFor(i, j)){
+          moveAmount++;
+        }
+      }
+    }
+    return moveAmount;
+  }
   FoundMove(x:number = 0, y:number = 0){
     let foundMove = this.FindMoveFor(x, y);
     return foundMove;
   }
   FindMoveFor(x:number, y:number){
+    if(this.blocks[x][y] != ''){
+      return false;
+    }
     let found = false;
     let possibleDirections: number[] = [];
     for (let index = 0; index < this.directions.length; index++) {
@@ -39,6 +54,17 @@ export class BoardComponent{
     this.ReplaceDirections(x, y);
     this.blocks[x][y] = this.colorTurn;
     this.changeColor.emit();
+    setTimeout(() => {
+      if(this.CountMoves() < 1){
+        this.changeColor.emit();
+        setTimeout(() => {
+          if(this.CountMoves() < 1){
+            this.changeColor.emit();
+            this.end.emit();
+          }  
+        }, 1);
+      }  
+    }, 1);
   }
   ReplaceDirections(x:number, y:number){
     for (let index = 0; index < this.directions.length; index++) {
