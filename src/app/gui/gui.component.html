@@ -1,7 +1,7 @@
 <div id="main" [ngStyle]="{'height': '20vh - 16px'}">
     <div id="black">
         <h1>Black</h1>
-        <h1>Black has {{ bPoints }} points</h1>
+        <h1>Black has {{ blocks.black }} points</h1>
     </div>
     <div class="generalInfo" [ngClass]="turn == 'w' ? 'white':'black'">
         <div id="buttons">
@@ -12,6 +12,6 @@
     </div>
     <div id="white">
         <h1>White</h1>
-        <h1>White has {{ wPoints }} points</h1>
+        <h1>White has {{ blocks.white }} points</h1>
     </div>
 </div>

@@ -7,10 +7,11 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./board.component.css']
 })
 export class BoardComponent{
-  @Input('array') blocks: string[][] = [];
+  @Input('array') arrayOfBlocks: string[][] = [];
   @Input('color') colorTurn:string = '';
   @Output('endGame') end = new EventEmitter();
   @Output('changeColor') changeColor = new EventEmitter();
+  @Output('blocksAmount') blocksAmount = new EventEmitter<{whiteBlocks:number, blackBlocks:number}>();
   directions = [
     [-1, 0],
     [-1, 1],
@@ -23,8 +24,8 @@ export class BoardComponent{
   ];
   CountMoves(){
     let moveAmount = 0;
-    for (let i = 0; i < this.blocks.length; i++) {
-      for (let j = 0; j < this.blocks[i].length; j++) {
+    for (let i = 0; i < this.arrayOfBlocks.length; i++) {
+      for (let j = 0; j < this.arrayOfBlocks[i].length; j++) {
         if(this.FindMoveFor(i, j)){
           moveAmount++;
         }
@@ -37,7 +38,7 @@ export class BoardComponent{
     return foundMove;
   }
   FindMoveFor(x:number, y:number){
-    if(this.blocks[x][y] != ''){
+    if(this.arrayOfBlocks[x][y] != ''){
       return false;
     }
     let found = false;
@@ -52,7 +53,8 @@ export class BoardComponent{
   }
   AddBlock(x:number, y:number){
     this.ReplaceDirections(x, y);
-    this.blocks[x][y] = this.colorTurn;
+    this.arrayOfBlocks[x][y] = this.colorTurn;
+    this.EmitBlocksAmount();
     this.changeColor.emit();
     setTimeout(() => {
       if(this.CountMoves() < 1){
@@ -66,6 +68,25 @@ export class BoardComponent{
       }  
     }, 1);
   }
+  EmitBlocksAmount(){
+    let wBlocks = this.CountSpecifiedBlocks('w');
+    let bBlocks = this.CountSpecifiedBlocks('b');
+    this.blocksAmount.emit({
+      whiteBlocks: wBlocks, 
+      blackBlocks: bBlocks
+    });
+  }
+  CountSpecifiedBlocks(blocks: string){
+    let foundBlocks = 0;
+    for (let x = 0; x < this.arrayOfBlocks.length; x++) {
+      for (let y = 0; y < this.arrayOfBlocks[x].length; y++) {
+         if(this.arrayOfBlocks[x][y] == blocks){
+          foundBlocks++;
+         }
+      }
+    }
+    return foundBlocks;
+  }
   ReplaceDirections(x:number, y:number){
     for (let index = 0; index < this.directions.length; index++) {
       if(this.FindDirection(x, y, this.directions[index])){
@@ -74,16 +95,16 @@ export class BoardComponent{
     }
   }
   ReplaceDirection(x:number, y:number, direction: number[]){
-    let nextBlock = this.blocks[x + direction[0]][y + direction[1]];  
-    this.blocks[x][y] = this.colorTurn;
+    let nextBlock = this.arrayOfBlocks[x + direction[0]][y + direction[1]];  
+    this.arrayOfBlocks[x][y] = this.colorTurn;
     if(nextBlock != this.colorTurn){
       this.ReplaceDirection(x + direction[0], y + direction[1], direction);
     }
   }
   FindDirection(x:number, y:number, direction: number[]): boolean{
     if(x + direction[0] >= 0 && y + direction[1] >= 0 && x + direction[0] <= 7 && y + direction[1] <= 7){
-      let block = this.blocks[x][y];
-      let nextBlock = this.blocks[x + direction[0]][y + direction[1]];
+      let block = this.arrayOfBlocks[x][y];
+      let nextBlock = this.arrayOfBlocks[x + direction[0]][y + direction[1]];
       if(nextBlock != ''){
         if(nextBlock == this.colorTurn){
           if(block != this.colorTurn && block != ''){

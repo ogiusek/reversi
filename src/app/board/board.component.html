@@ -1,4 +1,4 @@
-<div class="board" *ngFor="let x of blocks; let xIndex = index">
+<div class="board" *ngFor="let x of arrayOfBlocks; let xIndex = index">
     <div class="line" *ngFor="let y of x; let yIndex = index">
         <app-puck class="app" [value]="y" [foundMove]="FoundMove(xIndex, yIndex)" (addBlock)="AddBlock(xIndex, yIndex)"></app-puck>
     </div>

@@ -6,8 +6,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./gui.component.css']
 })
 export class GuiComponent{
-  @Input('whitePoints') bPoints = 0;
-  @Input('blackPoints') wPoints = 0;
+  @Input('points') blocks = {white:2, black:2};
   @Input('color') turn = 'b';
   @Output('reset') reset = new EventEmitter();
   @Output('back') back = new EventEmitter();
