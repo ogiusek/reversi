@@ -1,7 +1,7 @@
 <div id="main" [ngStyle]="{'height': '20vh - 16px'}">
     <div id="black">
-        <h1>Black</h1>
-        <h1>Black has {{ blocks.black }} points</h1>
+        <h1 class="title">Black</h1>
+        <h1 class="title">Black has {{ blocks.black }} points</h1>
     </div>
     <div class="generalInfo" [ngClass]="turn == 'w' ? 'white':'black'">
         <div id="buttons">
@@ -9,14 +9,14 @@
             <button (click)="Reset()">Reset</button>
         </div>
         <div style="transition: 1s;" [ngClass]="turn == 'w' ? 'white':'black'" *ngIf="!endTurn">
-            <h1 *ngIf="turn == 'b'">black</h1>
-            <h1 *ngIf="turn == 'w'">white</h1>
-            <h1> turn</h1>
+            <h1 class="text" *ngIf="turn == 'b'">black</h1>
+            <h1 class="text" *ngIf="turn == 'w'">white</h1>
+            <h1 class="text"> turn</h1>
         </div>
-        <h2 *ngIf="endTurn">Game Ended<br>{{ finishText }}</h2>
+        <h2 class="text" *ngIf="endTurn">Game Ended<br>{{ finishText }}</h2>
     </div>
     <div id="white">
-        <h1>White</h1>
-        <h1>White has {{ blocks.white }} points</h1>
+        <h1 class="title">White</h1>
+        <h1 class="title">White has {{ blocks.white }} points</h1>
     </div>
 </div>

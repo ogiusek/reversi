@@ -1,5 +1,9 @@
 div {
     transition: 1s;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
 }
 
 .black {
