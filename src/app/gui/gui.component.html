@@ -5,7 +5,7 @@
     </div>
     <div class="generalInfo" [ngClass]="turn == 'w' ? 'white':'black'">
         <div id="buttons">
-            <button>Back ←</button>
+            <button (click)="Back()">Back ←</button>
             <button (click)="Reset()">Reset</button>
         </div>
         <div style="transition: 1s;" [ngClass]="turn == 'w' ? 'white':'black'" *ngIf="!endTurn">

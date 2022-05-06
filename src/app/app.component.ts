@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit{
   movesHistory: string[][][] = [];
+  colorsHistory: string[] = [];
   blocksArray: string[][] = [];
   arrayLength = 8;
   colorTurn = 'b';
@@ -27,6 +28,8 @@ export class AppComponent implements OnInit{
   }
   Reset(){
     this.blocksArray = [];
+    this.movesHistory = [];
+    this.colorsHistory = [];
     this.colorTurn = 'b';
     this.finishedGame = false;
     for (let i = 0; i < this.arrayLength; i++) {
@@ -39,6 +42,14 @@ export class AppComponent implements OnInit{
     this.blocksArray[this.arrayLength / 2 - 1][this.arrayLength / 2 - 1] = "w";
     this.blocksArray[this.arrayLength / 2 - 1][this.arrayLength / 2] = "b";
     this.blocksArray[this.arrayLength / 2][this.arrayLength / 2 - 1] = "b";
+  }
+  RestoreMove(){
+    if(this.movesHistory.length > 0){
+      this.blocksArray = this.movesHistory[0];
+      this.movesHistory.shift();
+      this.colorTurn = this.colorsHistory[0];
+      this.colorsHistory.shift();
+    }
   }
   ChangeColor(){
     if(this.colorTurn == 'b'){

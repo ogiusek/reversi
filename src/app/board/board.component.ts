@@ -9,6 +9,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class BoardComponent{
   @Input('array') arrayOfBlocks: string[][] = [];
   @Input('color') colorTurn:string = '';
+  @Input('movesHistory') movesHistory: string[][][] = [];
+  @Input('colorsHistory') colorsHistory: string[] = [];
   @Output('endGame') end = new EventEmitter();
   @Output('changeColor') changeColor = new EventEmitter();
   @Output('blocksAmount') blocksAmount = new EventEmitter<{whiteBlocks:number, blackBlocks:number}>();
@@ -51,7 +53,21 @@ export class BoardComponent{
     }
     return found;
   }
+  SaveMove(){
+    //when i add arrayOfBlocks to movesHistory then everything in array equals arrayOfBlocks
+    let simpleArray = this.arrayOfBlocks.toString().split(',');
+    let readyArray: string[][] = [];
+    for (let i = 0; i < this.arrayOfBlocks.length; i++) {
+      readyArray.push([]);
+      for (let j = 0; j < this.arrayOfBlocks.length; j++) {
+        readyArray[i].push(simpleArray[i * 8 + j]);
+      }
+    }
+    this.movesHistory.unshift(readyArray);
+    this.colorsHistory.unshift(this.colorTurn);
+  }
   AddBlock(x:number, y:number){
+    this.SaveMove();
     this.ReplaceDirections(x, y);
     this.arrayOfBlocks[x][y] = this.colorTurn;
     this.EmitBlocksAmount();
@@ -65,7 +81,7 @@ export class BoardComponent{
             this.end.emit();
           }  
         }, 1);
-      }  
+      }
     }, 1);
   }
   EmitBlocksAmount(){
