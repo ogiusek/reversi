@@ -1,15 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-get-info',
   templateUrl: './get-info.component.html',
   styleUrls: ['./get-info.component.css']
 })
-export class GetInfoComponent implements OnInit {
-
+export class GetInfoComponent{
+  @Output('enemyInformations') beginInformations = new EventEmitter<{
+    enemy:string, 
+    enemyLevel:number
+  }>();
+  send = false;
+  enemyChoice = 'p';
+  showRange = false;
+  EnemyLevel = 0;
   constructor() { }
 
-  ngOnInit(): void {
+  ChangeChoice(choice: string){
+    this.enemyChoice = choice;
+    switch(choice){
+      case 'p':
+        this.showRange = false;
+        break;
+      case 'b':
+        this.showRange = true;
+        break;
+      case 'w':
+        this.showRange = true;
+        break;
+    }
+  }
+  Submit(){
+    let informations = {
+      enemy:this.enemyChoice,
+      enemyLevel:this.EnemyLevel
+    };
+    this.beginInformations.emit(informations);
+    this.send = true;
   }
 
 }

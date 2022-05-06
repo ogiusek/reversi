@@ -1,22 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent{
   movesHistory: string[][][] = [];
   colorsHistory: string[] = [];
   blocksArray: string[][] = [];
   arrayLength = 8;
   colorTurn = 'b';
   finishedGame = false;
+  enemyInformations = {
+    enemy:'',
+    enemyLevel:0
+  };
   blocks = {
     white: 2,
     black: 2
   };
-  ngOnInit(): void{
+  constructor(){
     this.Reset();
   }
   EndGame(){

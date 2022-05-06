@@ -1,1 +1,17 @@
-<p>get-info works!</p>
+<section *ngIf="!send">
+    <h1 class="title">New game</h1>
+    <div class="buttons">
+        <button (click)="ChangeChoice('p')" [ngClass]="enemyChoice == 'p' ? 'chosen':''">player</button>
+        <button (click)="ChangeChoice('b')" [ngClass]="enemyChoice == 'b' ? 'chosen':''">Black</button>
+        <button (click)="ChangeChoice('w')" [ngClass]="enemyChoice == 'w' ? 'chosen':''">White</button>
+    </div>
+    <div class="enemyInput">
+        <div *ngIf="showRange">
+            <h2 class="text">Enemy level</h2>
+            <input [(ngModel)]="EnemyLevel" type="range" min="0" max="2" *ngIf="showRange">
+        </div>
+    </div>
+    <div class="submit">
+        <button (click)="Submit()">Begin</button>
+    </div>
+</section>

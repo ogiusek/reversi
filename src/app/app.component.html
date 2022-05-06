@@ -1,4 +1,5 @@
 <div [ngClass]="colorTurn == 'w' ? 'white':'black'">
+    <app-get-info (enemyInformations)="enemyInformations = $event"></app-get-info>
     <app-board [array]="blocksArray" [color]="colorTurn" [movesHistory]="movesHistory" [colorsHistory]="colorsHistory" (changeColor)="ChangeColor()" (blocksAmount)="WriteToBlocks($event)" (endGame)="finishedGame = true"></app-board>
     <app-gui [color]="colorTurn" [points]="blocks" [finished]="finishedGame" (reset)="Reset()" (back)="RestoreMove()"></app-gui>
 </div>
