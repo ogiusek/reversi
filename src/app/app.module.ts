@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { PuckComponent } from './puck/puck.component';
 import { GetInfoComponent } from './get-info/get-info.component';
 import { GuiComponent } from './gui/gui.component';
-import { BoardComponent } from './board/board.component';
 import { VirtualEnemyComponent } from './virtual-enemy/virtual-enemy.component';
 
 @NgModule({
@@ -15,7 +14,6 @@ import { VirtualEnemyComponent } from './virtual-enemy/virtual-enemy.component';
     PuckComponent,
     GetInfoComponent,
     GuiComponent,
-    BoardComponent,
     VirtualEnemyComponent
   ],
   imports: [

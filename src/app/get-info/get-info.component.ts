@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Input,  Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-get-info',
@@ -10,7 +10,7 @@ export class GetInfoComponent{
     enemy:string, 
     enemyLevel:number
   }>();
-  send = false;
+  show = true;
   enemyChoice = 'p';
   showRange = false;
   EnemyLevel = 0;
@@ -36,7 +36,7 @@ export class GetInfoComponent{
       enemyLevel:this.EnemyLevel
     };
     this.beginInformations.emit(informations);
-    this.send = true;
+    this.show = false;
   }
 
 }

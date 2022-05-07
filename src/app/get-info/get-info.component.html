@@ -1,4 +1,4 @@
-<section *ngIf="!send">
+<section *ngIf="show">
     <h1 class="title">New game</h1>
     <div class="buttons">
         <button (click)="ChangeChoice('p')" [ngClass]="enemyChoice == 'p' ? 'chosen':''">player</button>
