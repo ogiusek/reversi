@@ -1,11 +1,12 @@
 <div [ngClass]="colorTurn == 'w' ? 'white':'black'" class="container">
-    <!-- <app-board [showGetInfo]="showGetInfo" [array]="blocksArray" [color]="colorTurn" [movesHistory]="movesHistory" [colorsHistory]="colorsHistory" (changeColor)="ChangeColor()" (blocksAmount)="WriteToBlocks($event)" (endGame)="finishedGame = true"></app-board> -->
     <app-get-info *ngIf="showGetInfo" (enemyInformations)="this.enemyInformations = $event; this.showGetInfo = false"></app-get-info>
-    <app-virtual-enemy [informations]="this.enemyInformations"></app-virtual-enemy>
     <div class="board" *ngFor="let x of arrayOfBlocks; let xIndex = index">
         <div class="line" *ngFor="let y of x; let yIndex = index">
-            <app-puck class="app" [value]="y" [foundMove]="FoundMove(xIndex, yIndex)" (addBlock)="AddBlock(xIndex, yIndex)"></app-puck>
+            <app-puck class="app" [value]="y" [foundMove]="FindMoveFor(xIndex, yIndex)" (addBlock)="AddBlock(xIndex, yIndex); "></app-puck>
         </div>
     </div>
+    <app-virtual-enemy *ngIf="this.enemyInformations.enemy != 'p' && this.enemyInformations.enemy != ''" 
+    [informations]="this.enemyInformations" [position]="{board: arrayOfBlocks, colorTurn: colorTurn}" 
+    (move)="AiAddBlock($event.x, $event.y)" ></app-virtual-enemy>
     <app-gui [color]="colorTurn" [points]="blocks" [finished]="finishedGame" (reset)="Reset()" (back)="RestoreMove()"></app-gui>
 </div>

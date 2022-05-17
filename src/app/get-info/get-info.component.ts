@@ -14,7 +14,6 @@ export class GetInfoComponent{
   enemyChoice = 'p';
   showRange = false;
   EnemyLevel = 0;
-  constructor() { }
 
   ChangeChoice(choice: string){
     this.enemyChoice = choice;

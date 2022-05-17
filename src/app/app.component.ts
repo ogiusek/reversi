@@ -61,19 +61,19 @@ export class AppComponent{
     this.arrayOfBlocks[this.arrayLength / 2 - 1][this.arrayLength / 2] = "b";
     this.arrayOfBlocks[this.arrayLength / 2][this.arrayLength / 2 - 1] = "b";
   }
+  ChangeColor(){
+    if(this.colorTurn == 'b'){
+      this.colorTurn = 'w';
+    }else{
+      this.colorTurn = 'b';
+    }
+  }
   RestoreMove(){
     if(this.movesHistory.length > 0){
       this.arrayOfBlocks = this.movesHistory[0];
       this.movesHistory.shift();
       this.colorTurn = this.colorsHistory[0];
       this.colorsHistory.shift();
-    }
-  }
-  ChangeColor(){
-    if(this.colorTurn == 'b'){
-      this.colorTurn = 'w';
-    }else{
-      this.colorTurn = 'b';
     }
   }
   CountMoves(){
@@ -86,10 +86,6 @@ export class AppComponent{
       }
     }
     return moveAmount;
-  }
-  FoundMove(x:number = 0, y:number = 0){
-    let foundMove = this.FindMoveFor(x, y);
-    return foundMove;
   }
   FindMoveFor(x:number, y:number){
     if(this.arrayOfBlocks[x][y] != ''){
@@ -117,6 +113,11 @@ export class AppComponent{
     }
     this.movesHistory.unshift(readyArray);
     this.colorsHistory.unshift(this.colorTurn);
+  }
+  AiAddBlock(x:number, y:number){
+    this.AddBlock(x, y);
+    this.colorsHistory.shift();
+    this.movesHistory.shift();
   }
   AddBlock(x:number, y:number){
     this.SaveMove();
