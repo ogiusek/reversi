@@ -61,25 +61,35 @@ export class VirtualEnemyComponent implements OnChanges{
     if(this.CountBlocks('') > 0){
       switch(this.enemyInfo.enemyLevel){
         case 0:
-          bestMove = this.SimpleEnemy(moves);
+          bestMove = this.SimpleEnemy();
           break;
         case 1:
-          bestMove = this.DeepEnemy(moves);
+          bestMove = this.DeepEnemy();
           break;
         case 2:
-          bestMove = this.SimpleEnemyP(moves);
+          bestMove = this.DeepEnemy({colorReverse: false, depth: 1});
           break;
         case 3:
-          bestMove = this.DeepEnemyP(moves);
+          bestMove = this.DeepEnemy({colorReverse: false, depth: 2});
           break;
         case 4:
-          // bestMove = this.HardEnemy(moves);
+          bestMove = this.SimpleEnemyP();
+          break;
+        case 5:
+          bestMove = this.DeepEnemyP();
+          break;
+        case 6:
+          bestMove = this.DeepEnemyP({colorReverse: false, depth: 1});
+          break;
+        case 7:
+          bestMove = this.DeepEnemyP({colorReverse: false, depth: 2});
           break;
       }
       this.move.emit({x:moves[bestMove.index][0], y:moves[bestMove.index][1]});
     }
   }
-  SimpleEnemy(moves = this.FindMoves(), deep = false){
+  SimpleEnemy(deep = false){
+    let moves = this.FindMoves();
     let bestMove = {score: 0, index: 0};
     for (let index = 0; index < moves.length; index++) {
       this.AddBlock(moves[index][0], moves[index][1]);
@@ -100,7 +110,8 @@ export class VirtualEnemyComponent implements OnChanges{
     }
     return bestMove;
   }
-  SimpleEnemyP(moves = this.FindMoves(), deep = false){
+  SimpleEnemyP(deep = false){
+    let moves = this.FindMoves();
     let bestMove = {score: 0, index: 0};
     for (let index = 0; index < moves.length; index++) {
       this.AddBlock(moves[index][0], moves[index][1]);
@@ -121,7 +132,8 @@ export class VirtualEnemyComponent implements OnChanges{
     }
     return bestMove;
   }
-  DeepEnemy(moves = this.FindMoves()){
+  DeepEnemy(deep = {colorReverse: false, depth: 0}, called = false){
+    let moves = this.FindMoves();
     let bestMove = {score: 0, index: 0};
     for (let index = 0; index < moves.length; index++) {
       this.AddBlock(moves[index][0], moves[index][1]);
@@ -129,27 +141,51 @@ export class VirtualEnemyComponent implements OnChanges{
       let enemyScore = 0;
       let enemyMoves = this.FindMoves();
       if(this.colorTurn != this.enemyInfo.enemy && enemyMoves.length > 0){
-        this.SimpleEnemyP(enemyMoves, true);
+        if(deep.depth > 0){
+          this.DeepEnemy({colorReverse:deep.colorReverse == true? false:true, depth: deep.depth - 1}, true);
+        }else{
+          this.SimpleEnemy(deep.colorReverse == true ? false:true);
+        }
         score = this.CountBlocks(this.enemyInfo.enemy);
         enemyScore = this.CountBlocks(this.enemyInfo.enemy == 'w' ? 'b':'w');
-        this.RestoreMove();
-        if(score - enemyScore > bestMove.score || index == 0){
-          bestMove.score = score - enemyScore;
-          bestMove.index = index;
-        }  
+        for (let index = 0; index <= deep.depth; index++) {
+          this.RestoreMove();   
+        }
+        if(deep.colorReverse){
+          if(score - enemyScore < bestMove.score || index == 0){
+            bestMove.score = score - enemyScore;
+            bestMove.index = index;
+          }
+        }else{
+          if(score - enemyScore > bestMove.score || index == 0){
+            bestMove.score = score - enemyScore;
+            bestMove.index = index;
+          }    
+        }
       }else{
         score = this.CountBlocks(this.enemyInfo.enemy);
         enemyScore = this.CountBlocks(this.enemyInfo.enemy == 'w' ? 'b':'w');
-        if(score - enemyScore > bestMove.score || index == 0){
-          bestMove.score = score - enemyScore;
-          bestMove.index = index;
+        if(deep.colorReverse){
+          if(score - enemyScore < bestMove.score || index == 0){
+            bestMove.score = score - enemyScore;
+            bestMove.index = index;
+          }
+        }else{
+          if(score - enemyScore > bestMove.score || index == 0){
+            bestMove.score = score - enemyScore;
+            bestMove.index = index;
+          }
         }
       }
       this.RestoreMove();
     }
+    if(called){
+      this.AddBlock(moves[bestMove.index][0], moves[bestMove.index][1]);
+    }
     return bestMove;
   }
-  DeepEnemyP(moves = this.FindMoves()){
+  DeepEnemyP(deep = {colorReverse: false, depth: 0}, called = false){
+    let moves = this.FindMoves();
     let bestMove = {score: 0, index: 0};
     for (let index = 0; index < moves.length; index++) {
       this.AddBlock(moves[index][0], moves[index][1]);
@@ -157,23 +193,46 @@ export class VirtualEnemyComponent implements OnChanges{
       let enemyScore = 0;
       let enemyMoves = this.FindMoves();
       if(this.colorTurn != this.enemyInfo.enemy && enemyMoves.length > 0){
-        this.SimpleEnemyP(enemyMoves, true);
+        if(deep.depth > 0){
+          this.DeepEnemyP({colorReverse:deep.colorReverse == true? false:true, depth: deep.depth - 1}, true);
+        }else{
+          this.SimpleEnemyP(deep.colorReverse == true ? false:true);
+        }
         score = this.CountPoints(this.enemyInfo.enemy);
         enemyScore = this.CountPoints(this.enemyInfo.enemy == 'w' ? 'b':'w');
-        this.RestoreMove();
-        if(score - enemyScore > bestMove.score || index == 0){
-          bestMove.score = score - enemyScore;
-          bestMove.index = index;
-        }  
+        for (let index = 0; index <= deep.depth; index++) {
+          this.RestoreMove();   
+        }
+        if(deep.colorReverse){
+          if(score - enemyScore < bestMove.score || index == 0){
+            bestMove.score = score - enemyScore;
+            bestMove.index = index;
+          }
+        }else{
+          if(score - enemyScore > bestMove.score || index == 0){
+            bestMove.score = score - enemyScore;
+            bestMove.index = index;
+          }    
+        }
       }else{
         score = this.CountPoints(this.enemyInfo.enemy);
         enemyScore = this.CountPoints(this.enemyInfo.enemy == 'w' ? 'b':'w');
-        if(score - enemyScore > bestMove.score || index == 0){
-          bestMove.score = score - enemyScore;
-          bestMove.index = index;
+        if(deep.colorReverse){
+          if(score - enemyScore < bestMove.score || index == 0){
+            bestMove.score = score - enemyScore;
+            bestMove.index = index;
+          }
+        }else{
+          if(score - enemyScore > bestMove.score || index == 0){
+            bestMove.score = score - enemyScore;
+            bestMove.index = index;
+          }
         }
       }
       this.RestoreMove();
+    }
+    if(called){
+      this.AddBlock(moves[bestMove.index][0], moves[bestMove.index][1]);
     }
     return bestMove;
   }
