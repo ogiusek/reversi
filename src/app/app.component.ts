@@ -29,7 +29,7 @@ export class AppComponent{
     [-1,-1]
   ];
   enemyInformations = {
-    enemy:'',
+    enemy:'p',
     enemyLevel:0
   };
   constructor(){

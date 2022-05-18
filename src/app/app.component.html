@@ -1,5 +1,6 @@
 <div [ngClass]="colorTurn == 'w' ? 'white':'black'" class="container">
-    <app-get-info *ngIf="showGetInfo" (enemyInformations)="this.enemyInformations = $event; this.showGetInfo = false"></app-get-info>
+    <app-get-info *ngIf="showGetInfo" (enemyInformations)="this.enemyInformations = $event; this.showGetInfo = false" 
+    [lastEnemy]="enemyInformations.enemy" [lastEnemyLevel]="enemyInformations.enemyLevel"></app-get-info>
     <div class="board" *ngFor="let x of arrayOfBlocks; let xIndex = index">
         <div class="line" *ngFor="let y of x; let yIndex = index">
             <app-puck class="app" [value]="y" [foundMove]="FindMoveFor(xIndex, yIndex)" (addBlock)="AddBlock(xIndex, yIndex); "></app-puck>
