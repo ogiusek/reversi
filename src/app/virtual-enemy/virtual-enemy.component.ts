@@ -32,7 +32,6 @@ export class VirtualEnemyComponent implements OnChanges{
   x = 0;
   y = 0;
   ngOnChanges(){
-    // console.log('?');
     setTimeout(() => {
       if(this.enemyInfo.enemy == this.board.colorTurn){
         this.colorTurn = this.board.colorTurn;
@@ -62,47 +61,124 @@ export class VirtualEnemyComponent implements OnChanges{
     if(this.CountBlocks('') > 0){
       switch(this.enemyInfo.enemyLevel){
         case 0:
-          bestMove = this.SimpleEnemy(bestMove, moves);
+          bestMove = this.SimpleEnemy(moves);
           break;
         case 1:
+          bestMove = this.DeepEnemy(moves);
           break;
         case 2:
-          bestMove = this.SimpleEnemyP(bestMove, moves);
+          bestMove = this.SimpleEnemyP(moves);
           break;
         case 3:
+          bestMove = this.DeepEnemyP(moves);
           break;
         case 4:
-          bestMove = this.HardEnemy(bestMove, moves);
+          // bestMove = this.HardEnemy(moves);
           break;
       }
       this.move.emit({x:moves[bestMove.index][0], y:moves[bestMove.index][1]});
     }
   }
-  SimpleEnemy(bestMove = {score: 0, index: 0}, moves = this.FindMoves()){
+  SimpleEnemy(moves = this.FindMoves(), deep = false){
+    let bestMove = {score: 0, index: 0};
     for (let index = 0; index < moves.length; index++) {
       this.AddBlock(moves[index][0], moves[index][1]);
-      let score = this.CountBlocks(this.enemyInfo.enemy);
+      let score = 0;
+      if(!deep){
+        score = this.CountBlocks(this.enemyInfo.enemy);
+      }else{
+        score = this.CountBlocks(this.enemyInfo.enemy == 'b' ? 'w':'b');
+      }
       this.RestoreMove();
       if(score > bestMove.score){
         bestMove.score = score;
         bestMove.index = index;
       }
     }
+    if(deep){
+      this.AddBlock(moves[bestMove.index][0], moves[bestMove.index][1]);
+    }
     return bestMove;
   }
-  SimpleEnemyP(bestMove = {score: 0, index: 0}, moves = this.FindMoves()){
+  SimpleEnemyP(moves = this.FindMoves(), deep = false){
+    let bestMove = {score: 0, index: 0};
     for (let index = 0; index < moves.length; index++) {
       this.AddBlock(moves[index][0], moves[index][1]);
-      let score = this.CountPoints(this.enemyInfo.enemy);
+      let score = 0;
+      if(!deep){
+        score = this.CountPoints(this.enemyInfo.enemy);
+      }else{
+        score = this.CountPoints(this.enemyInfo.enemy == 'b' ? 'w':'b');
+      }
       this.RestoreMove();
       if(score > bestMove.score){
         bestMove.score = score;
         bestMove.index = index;
       }
     }
+    if(deep){
+      this.AddBlock(moves[bestMove.index][0], moves[bestMove.index][1]);
+    }
     return bestMove;
   }
-  HardEnemy(bestMove = {score: 0, index: 0}, moves = this.FindMoves()){
+  DeepEnemy(moves = this.FindMoves()){
+    let bestMove = {score: 0, index: 0};
+    for (let index = 0; index < moves.length; index++) {
+      this.AddBlock(moves[index][0], moves[index][1]);
+      let score = 0;
+      let enemyScore = 0;
+      let enemyMoves = this.FindMoves();
+      if(this.colorTurn != this.enemyInfo.enemy && enemyMoves.length > 0){
+        this.SimpleEnemyP(enemyMoves, true);
+        score = this.CountBlocks(this.enemyInfo.enemy);
+        enemyScore = this.CountBlocks(this.enemyInfo.enemy == 'w' ? 'b':'w');
+        this.RestoreMove();
+        if(score - enemyScore > bestMove.score || index == 0){
+          bestMove.score = score - enemyScore;
+          bestMove.index = index;
+        }  
+      }else{
+        score = this.CountBlocks(this.enemyInfo.enemy);
+        enemyScore = this.CountBlocks(this.enemyInfo.enemy == 'w' ? 'b':'w');
+        if(score - enemyScore > bestMove.score || index == 0){
+          bestMove.score = score - enemyScore;
+          bestMove.index = index;
+        }
+      }
+      this.RestoreMove();
+    }
+    return bestMove;
+  }
+  DeepEnemyP(moves = this.FindMoves()){
+    let bestMove = {score: 0, index: 0};
+    for (let index = 0; index < moves.length; index++) {
+      this.AddBlock(moves[index][0], moves[index][1]);
+      let score = 0;
+      let enemyScore = 0;
+      let enemyMoves = this.FindMoves();
+      if(this.colorTurn != this.enemyInfo.enemy && enemyMoves.length > 0){
+        this.SimpleEnemyP(enemyMoves, true);
+        score = this.CountPoints(this.enemyInfo.enemy);
+        enemyScore = this.CountPoints(this.enemyInfo.enemy == 'w' ? 'b':'w');
+        this.RestoreMove();
+        if(score - enemyScore > bestMove.score || index == 0){
+          bestMove.score = score - enemyScore;
+          bestMove.index = index;
+        }  
+      }else{
+        score = this.CountPoints(this.enemyInfo.enemy);
+        enemyScore = this.CountPoints(this.enemyInfo.enemy == 'w' ? 'b':'w');
+        if(score - enemyScore > bestMove.score || index == 0){
+          bestMove.score = score - enemyScore;
+          bestMove.index = index;
+        }
+      }
+      this.RestoreMove();
+    }
+    return bestMove;
+  }
+  HardEnemy(moves = this.FindMoves()){
+    let bestMove = {score: 0, index: 0};
     return bestMove;
   }
   FindMoves(){
@@ -170,17 +246,12 @@ export class VirtualEnemyComponent implements OnChanges{
     this.ReplaceDirections(x, y);
     this.blocksArray[x][y] = this.colorTurn;
     this.ChangeColor();
-    setTimeout(() => {
+    if(this.CountMoves() < 1){
+      this.ChangeColor();
       if(this.CountMoves() < 1){
         this.ChangeColor();
-        setTimeout(() => {
-          if(this.CountMoves() < 1){
-            this.ChangeColor();
-            // this.EndGame();
-          }  
-        }, 1);
-      }
-    }, 1);
+      }  
+    }
   }
   CountBlocks(blocks: string){
     let foundBlocks = 0;
