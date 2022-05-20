@@ -8,7 +8,7 @@
             <button (click)="Back()">Back ←</button>
             <button (click)="Reset()">Reset</button>
         </div>
-        <div style="transition: 1s;" [ngClass]="turn == 'w' ? 'white':'black'" *ngIf="!endTurn">
+        <div style="transition: 1s;" [ngClass]="turn == 'w' ? 'white':'black'" *ngIf="!endTurn" class="textContainer">
             <h1 class="text" *ngIf="turn == 'b'">black</h1>
             <h1 class="text" *ngIf="turn == 'w'">white</h1>
             <h1 class="text"> turn</h1>

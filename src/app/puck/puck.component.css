@@ -34,7 +34,7 @@
 
 @media all and (max-width: 80vh) {
     .background {
-        width: 12.5vw;
-        height: 12.5vw;
+        width: calc(12.5vw - 2px);
+        height: calc(12.5vw - 2px);
     }
 }
