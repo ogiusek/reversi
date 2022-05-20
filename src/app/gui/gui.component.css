@@ -71,6 +71,14 @@ button {
     padding: 0px;
 }
 
+.textContainer {
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 .white {
     background-color: white;
     color: black;
@@ -79,4 +87,18 @@ button {
 .black {
     background-color: black;
     color: white;
+}
+
+@media all and (min-width: 100vh) {
+    #buttons button {
+        font-size: calc(5vh - 2px);
+    }
+    .text {
+        font-size: 3vh;
+        margin: 0px;
+    }
+    .title {
+        font-size: 6vh;
+        margin: 0px;
+    }
 }
