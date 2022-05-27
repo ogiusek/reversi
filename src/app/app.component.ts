@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
-
+import { Color } from './model/color';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent{
-  movesHistory: string[][][] = [];
-  colorsHistory: string[] = [];
-  // blocksArray: string[][] = [];
+  Color = Color;
+  movesHistory: Color[][][] = [];
+  colorsHistory: Color[] = [];
   arrayLength = 8;
-  colorTurn = 'b';
+  colorTurn = Color.black;
   showGetInfo = true;
   finishedGame = false;
-  arrayOfBlocks: string[][] = [];
+  arrayOfBlocks: Color[][] = [];
   blocks = {
     white: 2,
     black: 2
@@ -29,7 +29,7 @@ export class AppComponent{
     [-1,-1]
   ];
   enemyInformations = {
-    enemy:'p',
+    enemy:Color.transparent,
     enemyLevel:0
   };
   constructor(){
@@ -48,24 +48,24 @@ export class AppComponent{
     this.arrayOfBlocks = [];
     this.movesHistory = [];
     this.colorsHistory = [];
-    this.colorTurn = 'b';
+    this.colorTurn = Color.black;
     this.finishedGame = false;
     for (let i = 0; i < this.arrayLength; i++) {
       this.arrayOfBlocks.push([]);
       for (let j = 0; j < this.arrayLength; j++) {
-        this.arrayOfBlocks[i].push("");
+        this.arrayOfBlocks[i].push(Color.transparent);
       }
     }
-    this.arrayOfBlocks[this.arrayLength / 2][this.arrayLength / 2] = "w";
-    this.arrayOfBlocks[this.arrayLength / 2 - 1][this.arrayLength / 2 - 1] = "w";
-    this.arrayOfBlocks[this.arrayLength / 2 - 1][this.arrayLength / 2] = "b";
-    this.arrayOfBlocks[this.arrayLength / 2][this.arrayLength / 2 - 1] = "b";
+    this.arrayOfBlocks[this.arrayLength / 2][this.arrayLength / 2] = Color.white;
+    this.arrayOfBlocks[this.arrayLength / 2 - 1][this.arrayLength / 2 - 1] = Color.white;
+    this.arrayOfBlocks[this.arrayLength / 2 - 1][this.arrayLength / 2] = Color.black;
+    this.arrayOfBlocks[this.arrayLength / 2][this.arrayLength / 2 - 1] = Color.black;
   }
   ChangeColor(){
-    if(this.colorTurn == 'b'){
-      this.colorTurn = 'w';
+    if(this.colorTurn == Color.black){
+      this.colorTurn = Color.white;
     }else{
-      this.colorTurn = 'b';
+      this.colorTurn = Color.black;
     }
   }
   RestoreMove(){
@@ -88,7 +88,7 @@ export class AppComponent{
     return moveAmount;
   }
   FindMoveFor(x:number, y:number){
-    if(this.arrayOfBlocks[x][y] != ''){
+    if(this.arrayOfBlocks[x][y] != Color.transparent){
       return false;
     }
     let found = false;
@@ -102,9 +102,8 @@ export class AppComponent{
     return found;
   }
   SaveMove(){
-    //when i add arrayOfBlocks to movesHistory then everything in array equals arrayOfBlocks
-    let simpleArray = this.arrayOfBlocks.toString().split(',');
-    let readyArray: string[][] = [];
+    let simpleArray = [...this.arrayOfBlocks].flat();
+    let readyArray: Color[][] = [];
     for (let i = 0; i < this.arrayOfBlocks.length; i++) {
       readyArray.push([]);
       for (let j = 0; j < this.arrayOfBlocks.length; j++) {
@@ -138,14 +137,14 @@ export class AppComponent{
     }, 1);
   }
   EmitBlocksAmount(){
-    let wBlocks = this.CountSpecifiedBlocks('w');
-    let bBlocks = this.CountSpecifiedBlocks('b');
+    let wBlocks = this.CountSpecifiedBlocks(Color.white);
+    let bBlocks = this.CountSpecifiedBlocks(Color.black);
     this.WriteToBlocks({
       whiteBlocks: wBlocks, 
       blackBlocks: bBlocks
     });
   }
-  CountSpecifiedBlocks(blocks: string){
+  CountSpecifiedBlocks(blocks: Color){
     let foundBlocks = 0;
     for (let x = 0; x < this.arrayOfBlocks.length; x++) {
       for (let y = 0; y < this.arrayOfBlocks[x].length; y++) {
@@ -174,9 +173,9 @@ export class AppComponent{
     if(x + direction[0] >= 0 && y + direction[1] >= 0 && x + direction[0] <= 7 && y + direction[1] <= 7){
       let block = this.arrayOfBlocks[x][y];
       let nextBlock = this.arrayOfBlocks[x + direction[0]][y + direction[1]];
-      if(nextBlock != ''){
+      if(nextBlock != Color.transparent){
         if(nextBlock == this.colorTurn){
-          if(block != this.colorTurn && block != ''){
+          if(block != this.colorTurn && block != Color.transparent){
             return true;
           }
         }else{

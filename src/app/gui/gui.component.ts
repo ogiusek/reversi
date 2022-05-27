@@ -1,4 +1,5 @@
 import { Component, Input, Output, OnChanges, EventEmitter } from '@angular/core';
+import { Color } from '../model/color';
 
 @Component({
   selector: 'app-gui',
@@ -7,10 +8,11 @@ import { Component, Input, Output, OnChanges, EventEmitter } from '@angular/core
 })
 export class GuiComponent implements OnChanges{
   @Input('points') blocks = {white:2, black:2};
-  @Input('color') turn = 'b';
+  @Input('color') turn = Color.black;
   @Input('finished') endTurn = false;
   @Output('reset') reset = new EventEmitter();
   @Output('back') back = new EventEmitter();
+  Color = Color;
   finishText = this.blocks.black > this.blocks.white ? 'black won': this.blocks.white > this.blocks.black ? 'white won':'draw';
   ngOnChanges(){
     this.RefreshFinishText();

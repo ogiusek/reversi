@@ -3,14 +3,14 @@
         <h1 class="title">Black</h1>
         <h1 class="title">Black has {{ blocks.black }} points</h1>
     </div>
-    <div class="generalInfo" [ngClass]="turn == 'w' ? 'white':'black'">
+    <div class="generalInfo" [ngClass]="turn == Color.white ? 'white':'black'">
         <div id="buttons">
             <button (click)="Back()">Back ←</button>
             <button (click)="Reset()">Reset</button>
         </div>
-        <div style="transition: 1s;" [ngClass]="turn == 'w' ? 'white':'black'" *ngIf="!endTurn" class="textContainer">
-            <h1 class="text" *ngIf="turn == 'b'">black</h1>
-            <h1 class="text" *ngIf="turn == 'w'">white</h1>
+        <div style="transition: 1s;" [ngClass]="turn == Color.white ? 'white':'black'" *ngIf="!endTurn" class="textContainer">
+            <h1 class="text" *ngIf="turn == Color.black">black</h1>
+            <h1 class="text" *ngIf="turn == Color.white">white</h1>
             <h1 class="text"> turn</h1>
         </div>
         <h2 class="text" *ngIf="endTurn">Game Ended<br>{{ finishText }}</h2>

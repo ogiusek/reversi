@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Color } from '../model/color';
 
 @Component({
   selector: 'app-virtual-enemy',
@@ -7,15 +8,15 @@ import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core
 })
 export class VirtualEnemyComponent implements OnChanges{
   @Input('informations') enemyInfo = {
-    enemy:'',
+    enemy:Color.transparent,
     enemyLevel:0
   };
   @Input('position') board = {
-    board:[['']],
-    colorTurn:''
+    board:[[Color.transparent]],
+    colorTurn:Color.transparent
   };
-  blocksArray = [['']];
-  colorTurn = '';
+  blocksArray = [[Color.transparent]];
+  colorTurn = Color.transparent;
   @Output('move') move = new EventEmitter<{x:number, y:number}>();
   directions = [
     [-1, 0],
@@ -27,8 +28,8 @@ export class VirtualEnemyComponent implements OnChanges{
     [ 0,-1],
     [-1,-1]
   ];
-  movesHistory: string[][][] = [];
-  colorsHistory: string[] = [];
+  movesHistory: Color[][][] = [];
+  colorsHistory: Color[] = [];
   x = 0;
   y = 0;
   ngOnChanges(){
@@ -44,9 +45,10 @@ export class VirtualEnemyComponent implements OnChanges{
       }
     }, 1);
   }
-  GetBoard(){
-    let simpleArray = this.board.board.toString().split(',');
-    let readyArray: string[][] = [];
+  
+  GetBoard() : Color[][]{
+    let simpleArray = [...this.board.board].flat();
+    let readyArray: Color[][] = [];
     for (let i = 0; i < this.board.board.length; i++) {
       readyArray.push([]);
       for (let j = 0; j < this.board.board.length; j++) {
@@ -55,10 +57,11 @@ export class VirtualEnemyComponent implements OnChanges{
     }
     return readyArray;
   }
+  
   MakeMove(){
     let moves = this.FindMoves();
     let bestMove = {score: 0, index: 0};
-    if(this.CountBlocks('') > 0){
+    if(this.CountBlocks(Color.transparent) > 0){
       switch(this.enemyInfo.enemyLevel){
         case 0:
           bestMove = this.SimpleEnemy();
@@ -88,6 +91,7 @@ export class VirtualEnemyComponent implements OnChanges{
       this.move.emit({x:moves[bestMove.index][0], y:moves[bestMove.index][1]});
     }
   }
+  
   SimpleEnemy(deep = false){
     let moves = this.FindMoves();
     let bestMove = {score: 0, index: 0};
@@ -97,7 +101,7 @@ export class VirtualEnemyComponent implements OnChanges{
       if(!deep){
         score = this.CountBlocks(this.enemyInfo.enemy);
       }else{
-        score = this.CountBlocks(this.enemyInfo.enemy == 'b' ? 'w':'b');
+        score = this.CountBlocks(this.enemyInfo.enemy == Color.black ? Color.white:Color.black);
       }
       this.RestoreMove();
       if(score > bestMove.score){
@@ -110,6 +114,7 @@ export class VirtualEnemyComponent implements OnChanges{
     }
     return bestMove;
   }
+  
   SimpleEnemyP(deep = false){
     let moves = this.FindMoves();
     let bestMove = {score: 0, index: 0};
@@ -119,7 +124,7 @@ export class VirtualEnemyComponent implements OnChanges{
       if(!deep){
         score = this.CountPoints(this.enemyInfo.enemy);
       }else{
-        score = this.CountPoints(this.enemyInfo.enemy == 'b' ? 'w':'b');
+        score = this.CountPoints(this.enemyInfo.enemy == Color.black ? Color.white:Color.black);
       }
       this.RestoreMove();
       if(score > bestMove.score){
@@ -132,6 +137,7 @@ export class VirtualEnemyComponent implements OnChanges{
     }
     return bestMove;
   }
+  
   DeepEnemy(deep = {colorReverse: false, depth: 0}, called = false){
     let moves = this.FindMoves();
     let bestMove = {score: 0, index: 0};
@@ -147,7 +153,7 @@ export class VirtualEnemyComponent implements OnChanges{
           this.SimpleEnemy(deep.colorReverse == true ? false:true);
         }
         score = this.CountBlocks(this.enemyInfo.enemy);
-        enemyScore = this.CountBlocks(this.enemyInfo.enemy == 'w' ? 'b':'w');
+        enemyScore = this.CountBlocks(this.enemyInfo.enemy == Color.white ? Color.black:Color.white);
         for (let index = 0; index <= deep.depth; index++) {
           this.RestoreMove();   
         }
@@ -164,7 +170,7 @@ export class VirtualEnemyComponent implements OnChanges{
         }
       }else{
         score = this.CountBlocks(this.enemyInfo.enemy);
-        enemyScore = this.CountBlocks(this.enemyInfo.enemy == 'w' ? 'b':'w');
+        enemyScore = this.CountBlocks(this.enemyInfo.enemy == Color.white ? Color.black:Color.white);
         if(deep.colorReverse){
           if(score - enemyScore < bestMove.score || index == 0){
             bestMove.score = score - enemyScore;
@@ -184,6 +190,7 @@ export class VirtualEnemyComponent implements OnChanges{
     }
     return bestMove;
   }
+  
   DeepEnemyP(deep = {colorReverse: false, depth: 0}, called = false){
     let moves = this.FindMoves();
     let bestMove = {score: 0, index: 0};
@@ -199,7 +206,7 @@ export class VirtualEnemyComponent implements OnChanges{
           this.SimpleEnemyP(deep.colorReverse == true ? false:true);
         }
         score = this.CountPoints(this.enemyInfo.enemy);
-        enemyScore = this.CountPoints(this.enemyInfo.enemy == 'w' ? 'b':'w');
+        enemyScore = this.CountPoints(this.enemyInfo.enemy == Color.white ? Color.black:Color.white);
         for (let index = 0; index <= deep.depth; index++) {
           this.RestoreMove();   
         }
@@ -216,7 +223,7 @@ export class VirtualEnemyComponent implements OnChanges{
         }
       }else{
         score = this.CountPoints(this.enemyInfo.enemy);
-        enemyScore = this.CountPoints(this.enemyInfo.enemy == 'w' ? 'b':'w');
+        enemyScore = this.CountPoints(this.enemyInfo.enemy == Color.white ? Color.black:Color.white);
         if(deep.colorReverse){
           if(score - enemyScore < bestMove.score || index == 0){
             bestMove.score = score - enemyScore;
@@ -236,10 +243,12 @@ export class VirtualEnemyComponent implements OnChanges{
     }
     return bestMove;
   }
+  
   HardEnemy(moves = this.FindMoves()){
     let bestMove = {score: 0, index: 0};
     return bestMove;
   }
+  
   FindMoves(){
     let moves: number[][] = [];
     for (let x = 0; x < this.blocksArray.length; x++) {
@@ -251,9 +260,11 @@ export class VirtualEnemyComponent implements OnChanges{
     }
     return moves;
   }
+  
   ChangeColor(){
-    this.colorTurn = this.colorTurn == 'w' ? 'b':'w';
+    this.colorTurn = this.colorTurn == Color.white ? Color.black:Color.white;
   }
+  
   RestoreMove(){
     if(this.movesHistory.length > 0){
       this.blocksArray = this.movesHistory[0];
@@ -262,6 +273,7 @@ export class VirtualEnemyComponent implements OnChanges{
       this.colorsHistory.shift();
     }
   }
+  
   CountMoves(){
     let moveAmount = 0;
     for (let i = 0; i < this.blocksArray.length; i++) {
@@ -273,8 +285,9 @@ export class VirtualEnemyComponent implements OnChanges{
     }
     return moveAmount;
   }
+  
   FindMoveFor(x:number, y:number){
-    if(this.blocksArray[x][y] != ''){
+    if(this.blocksArray[x][y] != Color.transparent){
       return false;
     }
     let found = false;
@@ -287,10 +300,10 @@ export class VirtualEnemyComponent implements OnChanges{
     }
     return found;
   }
+
   SaveMove(){
-    //when i add arrayOfBlocks to movesHistory then everything in array equals arrayOfBlocks
-    let simpleArray = this.blocksArray.toString().split(',');
-    let readyArray: string[][] = [];
+    let simpleArray = [...this.board.board].flat();
+    let readyArray: Color[][] = [];
     for (let i = 0; i < this.blocksArray.length; i++) {
       readyArray.push([]);
       for (let j = 0; j < this.blocksArray.length; j++) {
@@ -300,6 +313,7 @@ export class VirtualEnemyComponent implements OnChanges{
     this.movesHistory.unshift(readyArray);
     this.colorsHistory.unshift(this.colorTurn);
   }
+  
   AddBlock(x:number, y:number){
     this.SaveMove();
     this.ReplaceDirections(x, y);
@@ -312,7 +326,8 @@ export class VirtualEnemyComponent implements OnChanges{
       }  
     }
   }
-  CountBlocks(blocks: string){
+  
+  CountBlocks(blocks: Color){
     let foundBlocks = 0;
     for (let x = 0; x < this.blocksArray.length; x++) {
       for (let y = 0; y < this.blocksArray[x].length; y++) {
@@ -323,7 +338,8 @@ export class VirtualEnemyComponent implements OnChanges{
     }
     return foundBlocks;
   }
-  CountPoints(blocks: string){
+  
+  CountPoints(blocks: Color){
     let foundBlocks = 0;
     for (let x = 0; x < this.blocksArray.length; x++) {
       for (let y = 0; y < this.blocksArray[x].length; y++) {
@@ -340,6 +356,7 @@ export class VirtualEnemyComponent implements OnChanges{
     }
     return foundBlocks;
   }
+  
   ReplaceDirections(x:number, y:number){
     for (let index = 0; index < this.directions.length; index++) {
       if(this.FindDirection(x, y, this.directions[index])){
@@ -347,6 +364,7 @@ export class VirtualEnemyComponent implements OnChanges{
       }
     }
   }
+  
   ReplaceDirection(x:number, y:number, direction: number[]){
     let nextBlock = this.blocksArray[x + direction[0]][y + direction[1]];  
     this.blocksArray[x][y] = this.colorTurn;
@@ -354,13 +372,14 @@ export class VirtualEnemyComponent implements OnChanges{
       this.ReplaceDirection(x + direction[0], y + direction[1], direction);
     }
   }
+  
   FindDirection(x:number, y:number, direction: number[]): boolean{
     if(x + direction[0] >= 0 && y + direction[1] >= 0 && x + direction[0] <= 7 && y + direction[1] <= 7){
       let block = this.blocksArray[x][y];
       let nextBlock = this.blocksArray[x + direction[0]][y + direction[1]];
-      if(nextBlock != ''){
+      if(nextBlock != Color.transparent){
         if(nextBlock == this.colorTurn){
-          if(block != this.colorTurn && block != ''){
+          if(block != this.colorTurn && block != Color.transparent){
             return true;
           }
         }else{

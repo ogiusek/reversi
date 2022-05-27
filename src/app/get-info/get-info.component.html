@@ -1,9 +1,9 @@
 <section *ngIf="show">
     <h1 class="title">New game</h1>
     <div class="buttons">
-        <button (click)="ChangeChoice('p')" [ngClass]="enemyChoice == 'p' ? 'chosen':''">player</button>
-        <button (click)="ChangeChoice('b')" [ngClass]="enemyChoice == 'b' ? 'chosen':''">Black</button>
-        <button (click)="ChangeChoice('w')" [ngClass]="enemyChoice == 'w' ? 'chosen':''">White</button>
+        <button (click)="ChangeChoice(Color.transparent)" [ngClass]="enemyChoice == Color.transparent ? 'chosen':''">player</button>
+        <button (click)="ChangeChoice(Color.black)" [ngClass]="enemyChoice == Color.black ? 'chosen':''">Black</button>
+        <button (click)="ChangeChoice(Color.white)" [ngClass]="enemyChoice == Color.white ? 'chosen':''">White</button>
     </div>
     <div class="enemyInput">
         <div *ngIf="showRange">

@@ -1,36 +1,40 @@
 import { Component, Input,  Output, EventEmitter, OnChanges } from '@angular/core';
-
+import { Color } from '../model/color';
 @Component({
   selector: 'app-get-info',
   templateUrl: './get-info.component.html',
   styleUrls: ['./get-info.component.css']
 })
 export class GetInfoComponent implements OnChanges{
-  @Input('lastEnemy') enemyChoice = 'p';
+  @Input('lastEnemy') enemyChoice = Color.transparent;
   @Input('lastEnemyLevel') enemyLevel = 0;
   @Output('enemyInformations') beginInformations = new EventEmitter<{
-    enemy:string, 
+    enemy:Color, 
     enemyLevel:number
   }>();
+  Color = Color;
   show = true;
   showRange = false;
+  
   ngOnChanges(){
-    this.showRange = this.enemyChoice == 'p' ? false:true;
+    this.showRange = this.enemyChoice == Color.transparent ? false:true;
   }
-  ChangeChoice(choice: string){
+  
+  ChangeChoice(choice: Color){
     this.enemyChoice = choice;
     switch(choice){
-      case 'p':
+      case Color.transparent:
         this.showRange = false;
         break;
-      case 'b':
+      case Color.black:
         this.showRange = true;
         break;
-      case 'w':
+      case Color.white:
         this.showRange = true;
         break;
     }
   }
+  
   Submit(){
     let informations = {
       enemy:this.enemyChoice,
@@ -39,5 +43,4 @@ export class GetInfoComponent implements OnChanges{
     this.beginInformations.emit(informations);
     this.show = false;
   }
-
 }
